@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>EXTRACTION ECONOMY v3.2 - ATLAS Master Integration</title>
+<title>EXTRACTION ECONOMY v4.1 - Cander Creative Master</title>
 <style>
     :root {
         --win-bg: #c0c0c0; --win-high: #ffffff; --win-shadow: #808080;
@@ -14,15 +14,15 @@
     .content-area { padding: 6px; }
     .inset-panel { box-shadow: inset 1px 1px var(--win-shadow), inset -1px -1px var(--win-high); padding: 6px; background: #dfdfdf; }
     
-    .protocol-label { position: relative; cursor: help; border-bottom: 1px dotted #333; display: block; padding: 2px; font-size: 10px; }
+    .protocol-label { position: relative; cursor: help; border-bottom: 1px dotted #333; display: block; padding: 4px 2px; font-size: 10px; line-height: 1.2; }
     .protocol-label:hover::after {
-        content: attr(data-tip); position: absolute; left: 20px; top: 20px; width: 240px; 
-        background: #ffffe1; border: 1px solid #000; padding: 5px; z-index: 100; font-weight: normal;
+        content: attr(data-tip); position: absolute; left: 20px; top: 25px; width: max-content; max-width: 240px; 
+        background: #ffffe1; border: 1px solid #000; padding: 6px; z-index: 100; font-weight: bold; color: #800000; font-size: 11px; font-family: 'Courier New', monospace; box-shadow: 2px 2px 0px rgba(0,0,0,0.5);
     }
 
     .led-container { height: 14px; background: #000; border: 1px solid var(--win-shadow); position: relative; overflow: hidden; margin-bottom: 2px; }
     .led-fill { height: 100%; transition: width 0.4s ease; }
-    .metric-row { display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 1px; }
+    .metric-row { display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 1px; align-items: center; }
     
     button { background: var(--win-bg); border: 1px solid var(--win-deep); box-shadow: inset 1px 1px var(--win-high), inset -1px -1px var(--win-shadow); padding: 4px; cursor: pointer; font-size: 10px; width: 100%; margin-top: 2px; font-weight: bold; }
     button:active { box-shadow: inset -1px -1px var(--win-high), inset 1px 1px var(--win-shadow); }
@@ -31,21 +31,38 @@
     canvas { background: #000; width: 100%; height: 80px; image-rendering: pixelated; border: 1px solid var(--win-shadow); }
     #event_log { height: 80px; overflow-y: scroll; background: #fff; font-family: 'Courier New'; font-size: 10px; padding: 2px; border: 1px solid var(--win-shadow); }
     .scorecard { font-weight: bold; color: #000080; font-size: 11px; line-height: 1.4; }
-    .legacy-list { font-size: 9px; list-style: none; padding: 0; margin: 0; }
     table { width: 100%; border-collapse: collapse; font-size: 9px; }
     th, td { padding: 2px; text-align: left; border-bottom: 1px solid #ccc; }
+    
+    .status-running { background: #008000; color: white; padding: 2px 4px; border-radius: 2px; font-size: 9px; animation: blinker 1s linear infinite; }
+    .status-halted { background: #800000; color: white; padding: 2px 4px; border-radius: 2px; font-size: 9px; }
+    @keyframes blinker { 50% { opacity: 0; } }
+    
+    .cander-logo { background: #000; padding: 12px; text-align: center; border: 2px solid var(--win-shadow); margin-bottom: 8px; box-shadow: inset 2px 2px #000, inset -2px -2px #444; }
+    .cander-logo-main { color: #00ff00; font-family: 'Courier New', monospace; font-size: 28px; font-weight: bold; letter-spacing: 8px; margin-left: 8px; text-shadow: 0px 0px 4px #00ff00; }
+    .cander-logo-sub { color: #888; font-family: 'Tahoma', sans-serif; font-size: 10px; letter-spacing: 12px; margin-top: 4px; }
+    
+    .debrief-box { border-left: 4px solid #800000; background: #f0f0f0; padding: 10px; margin-top: 15px; font-family: 'Courier New', monospace; font-size: 11px; }
+    .inbox-item { border-bottom: 1px solid #ccc; padding: 6px; cursor: pointer; }
+    .inbox-item:hover { background: #e0e0e0; }
+    .unread { font-weight: bold; color: #000080; }
 </style>
 </head>
 <body>
 
 <div class="window" style="max-width: 1250px; margin: 0 auto;">
-    <div class="title-bar"><span>CANDER_CREATIVE_SUITE_v3.2_ATLAS_CORE</span><span>[X]</span></div>
+    <div class="title-bar"><span>CANDER_OPERATIONAL_TERMINAL_v4.1</span><span>[X]</span></div>
     
     <div class="content-area">
+        <div class="cander-logo">
+            <div class="cander-logo-main">CANDER</div>
+            <div class="cander-logo-sub">CREATIVE SUITE</div>
+        </div>
+
         <div style="display: grid; grid-template-columns: 240px 1fr 340px; gap: 8px;">
             
             <div style="display: flex; flex-direction: column; gap: 5px;">
-                <div class="window"><div class="title-bar">RESERVES</div><div class="content-area"><div id="p_disp" style="font-size:18px; font-weight:bold; color:green;">$15,000</div></div></div>
+                <div class="window"><div class="title-bar">RESERVES</div><div class="content-area"><div id="p_disp" style="font-size:18px; font-weight:bold; color:green;">$500,000</div></div></div>
                 <div class="window"><div class="title-bar">HOST_GDP_REMAINING</div><div class="content-area">
                     <div class="metric-row"><span>Viability</span><span id="g_disp">100.0%</span></div>
                     <div class="led-container"><div id="g_bar" class="led-fill" style="width:100%; background:#00ff00;"></div></div>
@@ -54,7 +71,7 @@
                     <div id="u_disp" style="font-size:16px; font-weight:bold;">10,000</div>
                     <div style="font-size:9px; color:#555;">Total Active Licenses</div>
                 </div></div>
-                <div class="window" style="background:#d4d0c8;">
+                <div class="window" style="background:#d4d0c8; flex-grow: 1;">
                     <div class="title-bar" style="background:#404040;">SCORECARD</div>
                     <div class="content-area scorecard">
                         Extracted: $<span id="s_ext">0</span><br>
@@ -63,36 +80,42 @@
                         Current Qtr: <span id="q_disp">1</span>
                     </div>
                 </div>
-                <div class="window" style="flex-grow: 1;"><div class="title-bar" style="background:#000080;">DYNASTY_LEGACY</div><div class="content-area inset-panel">
-                    <ul id="legacy_list" class="legacy-list"><li>No records found.</li></ul>
-                </div></div>
             </div>
 
             <div>
                 <div class="window">
                     <div class="title-bar" style="background:#4a90e2;">INFRASTRUCTURE LOCK-IN (THE CAGE)</div>
                     <div class="content-area inset-panel">
-                        <label class="protocol-label" data-tip="Operate cloud storage at a loss to drive adoption. Limits churn slightly. Cost: -$5k/qtr."><input type="checkbox" id="i_cld"> Cloud-Default Architecture [Subsidize]</label>
-                        <label class="protocol-label" data-tip="Deprecate .PSD/.RAW formats. Force use of .AXM files. Drastically increases Studio/Enterprise dependency."><input type="checkbox" id="i_fmt"> Proprietary Format Lock (.AXM)</label>
-                        <label class="protocol-label" data-tip="Revoke perpetual licenses. Force cloud authentication. (+40% yield, +High Awareness)"><input type="checkbox" id="i_sas"> SaaS Transition</label>
+                        <label class="protocol-label" data-tip="INDUSTRY TERM: Subsidized Acquisition / Loss Leader"><input type="checkbox" id="i_cld"> Operate cloud storage at a loss (-$150k/qtr) to drive initial adoption and limit churn.</label>
+                        <label class="protocol-label" data-tip="INDUSTRY TERM: Proprietary Format Lock-In"><input type="checkbox" id="i_fmt"> Deprecate standard file exports. Force users to save work exclusively within our closed ecosystem.</label>
+                        <label class="protocol-label" data-tip="INDUSTRY TERM: Software-as-a-Service (SaaS) Transition"><input type="checkbox" id="i_sas"> Revoke previously sold perpetual licenses and require monthly cloud authentication.</label>
                     </div>
                 </div>
 
                 <div class="window"><div class="title-bar">EXTRACTION_PROTOCOLS (THE HARVEST)</div><div class="content-area inset-panel">
-                    <label class="protocol-label" data-tip="Charge maximum possible based on commercial deadline urgency. ($1.50/user base)"><input type="checkbox" id="t_pd"> Dynamic Tier Pricing [Yield: High]</label>
-                    <label class="protocol-label" data-tip="Complex UI obfuscation to prevent license cancellation. ($1.00/user base)"><input type="checkbox" id="t_st"> Subscription Retention [Yield: Med]</label>
-                    <label class="protocol-label" data-tip="Hidden cloud-compute fees added at final rendering. ($0.50/user base)"><input type="checkbox" id="t_hf"> Rendering Junk Fees [Yield: Low]</label>
-                    <label class="protocol-label" data-tip="Liquidate user telemetry to 3rd parties. Causes severe political risk if unshielded. ($2.00/user base)"><input type="checkbox" id="t_db"> Telemetry Brokering [Yield: Max]</label>
+                    
+                    <div class="metric-row" style="margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px dotted #888;">
+                        <span style="font-weight:bold;">MONTHLY SUBSCRIPTION: $<span id="price_val">10</span></span>
+                        <input type="range" id="price_slider" min="0" max="150" value="10" oninput="document.getElementById('price_val').innerText=this.value" style="width: 120px;">
+                    </div>
+
+                    <label class="protocol-label" data-tip="INDUSTRY TERM: Algorithmic Price Discrimination"><input type="checkbox" id="t_pd"> Automatically charge users the maximum possible price based on their deadline urgency. (+$15/user)</label>
+                    <label class="protocol-label" data-tip="INDUSTRY TERM: Dark Pattern Cancellation Friction"><input type="checkbox" id="t_st"> Deploy confusing interface mazes to intentionally frustrate license cancellation. (+$10/user)</label>
+                    <label class="protocol-label" data-tip="INDUSTRY TERM: Drip Pricing / Junk Fees"><input type="checkbox" id="t_hf"> Hide additional cloud-compute costs until the final stage of project rendering. (+$5/user)</label>
+                    <label class="protocol-label" data-tip="INDUSTRY TERM: Surveillance Capitalism / Data Brokering"><input type="checkbox" id="t_db"> Secretly sell user behavioral data and client assets to third parties. Severe political risk. (+$20/user)</label>
                 </div></div>
                 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px;">
                     <div class="window"><div class="title-bar">INFLUENCE</div><div class="content-area">
-                        <button onclick="manage('lobby')" id="btn_lobby">LOBBYING ($15k) [+25 Pol]</button>
-                        <button onclick="manage('phil')" id="btn_phil">PHILANTHROPY ($5k) [+10 Pol]</button>
+                        <button onclick="manage('lobby')" id="btn_lobby">LOBBYING ($250k) [+25 Pol]</button>
+                        <button onclick="manage('phil')" id="btn_phil">PHILANTHROPY ($50k) [+10 Pol]</button>
                     </div></div>
-                    <div class="window"><div class="title-bar">SYSTEM_CLOCK</div><div class="content-area">
-                        <button onclick="next_q()" style="height:45px; background:#c0f0c0; font-size: 13px;">PROCESS QUARTER</button>
-                    </div></div>
+                    <div class="window">
+                        <div class="title-bar">SYSTEM_CLOCK <span id="clock_status" class="status-halted">HALTED</span></div>
+                        <div class="content-area">
+                            <button onclick="toggle_sim()" id="btn_clock" style="height:45px; background:#c0f0c0; font-size: 13px;">ENGAGE AUTOMATION</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -115,31 +138,44 @@
                     </div>
                 </div>
 
-                <div class="window" style="flex-grow: 1;"><div class="title-bar">PROFIT_TRENDS</div><div class="content-area"><canvas id="perf_canvas"></canvas></div></div>
-                
-                <div class="window" style="flex-grow: 1;"><div class="title-bar">INTERNAL_COMMS</div><div class="content-area"><div id="event_log"></div></div></div>
+                <div class="window" style="flex-grow: 1;"><div class="title-bar">INTERNAL_COMMS</div><div class="content-area" style="display:flex; flex-direction:column;">
+                    <button onclick="open_inbox()" id="btn_inbox" style="margin-bottom: 5px; background: #fffacd;">OPEN INBOX (0 Unread)</button>
+                    <div id="event_log" style="flex-grow:1;"></div>
+                </div></div>
             </div>
         </div>
     </div>
 </div>
 
 <div id="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:1000; align-items:center; justify-content:center;">
-    <div class="window" style="width:450px;"><div class="title-bar"><span id="m_title">MEMO</span></div><div class="content-area" id="m_body"></div><button onclick="close_modal()">CLOSE</button></div>
+    <div class="window" style="width:450px;"><div class="title-bar"><span id="m_title">MEMO</span></div><div class="content-area" id="m_body"></div><button onclick="close_modal()">ACKNOWLEDGE & RESUME</button></div>
+</div>
+
+<div id="inbox_modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:1500; align-items:center; justify-content:center;">
+    <div class="window" style="width:550px; height:400px; display:flex; flex-direction:column;">
+        <div class="title-bar"><span>SECURE_INBOX</span><span>[X]</span></div>
+        <div class="content-area" style="display:flex; flex-direction:row; height:100%; padding:0; background:#dfdfdf;">
+            <div style="width: 200px; background:#fff; border-right: 2px solid var(--win-shadow); overflow-y:auto;" id="inbox_list"></div>
+            <div style="flex-grow:1; padding: 10px; background:#f5f5f5; overflow-y:auto; font-family:'Courier New', monospace; font-size:11px;" id="inbox_reader">Select a message to read.</div>
+        </div>
+        <button onclick="close_inbox()" style="margin: 4px;">CLOSE INBOX</button>
+    </div>
 </div>
 
 <div id="game_over_modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:2000; align-items:center; justify-content:center;">
-    <div class="window" style="width:450px;"><div class="title-bar"><span id="go_title">GAME OVER</span></div><div class="content-area" id="go_body"></div><br><button onclick="reset_game()" style="width:100%;">RESTART_SIMULATION</button></div>
+    <div class="window" style="width:550px;"><div class="title-bar"><span id="go_title">GAME OVER</span></div><div class="content-area" id="go_body"></div><br><button onclick="reset_game()" style="width:100%;">REBOOT SYSTEM</button></div>
 </div>
 
 <script>
-// Macro-economic tuning constants
-const GDP_DIVISOR = 55000;
+const GDP_DIVISOR = 3500000;
+let sim_timer = null;
 
 let state = {
-    q: 1, profit: 15000, gdp: 100,
+    q: 1, profit: 500000, gdp: 100,
     global_aware: 0, global_dep: 0, pol: 50, 
     ext: 0, lob: 0, over: false, modal_active: false,
-    history: { p: [15000], g: [100] },
+    history: { p: [500000], g: [100] },
+    inbox: [], unread: 0,
     segments: [
         { name: "Hobbyists", count: 5000, v: 0.8, a: 5, d: 0 },
         { name: "Indie Pros", count: 3000, v: 1.2, a: 15, d: 15 },
@@ -150,40 +186,43 @@ let state = {
         {
             id: "c_pol_warn",
             condition: () => state.pol < 30 && state.global_aware > 60,
-            text: "CRITICAL RISK: Political capital is degrading due to sustained studio outrage. Subpoenas are being drafted by the FTC. Fund PAC Lobbying immediately or face antitrust breakup.",
+            title: "URGENT: Antitrust Subpoenas",
+            text: "CRITICAL RISK: Political capital is degrading due to sustained studio outrage regarding our pricing models. Subpoenas are currently being drafted by the FTC. \n\nWe must fund PAC Lobbying ($250k) immediately or face imminent antitrust breakup. Price hikes are irrelevant if we are dissolved by the state.",
             triggered: false
         },
         {
             id: "c_lockin_hostage",
-            condition: (protocols) => protocols.i_sas && state.global_dep >= 60,
-            text: "SUBJECT: Churn Mitigation via Asset Hostage\n\nCommercial agencies are outraged by the SaaS transition. However, financial models indicate negligible churn risk. Their historical high-res portfolios are encoded in our proprietary .AXM format. The switching cost is the total destruction of their life's work. Proceed with price hikes.",
+            condition: (protocols, price) => protocols.i_sas && protocols.i_fmt && price >= 50,
+            title: "INTERNAL: Asset Hostage Analysis",
+            text: "Commercial agencies are coordinating boycotts due to the recent $50+ tier price hikes. However, financial models indicate negligible churn risk. \n\nTheir historical high-res portfolios are strictly encoded in our proprietary .AXM format, and cannot be opened locally due to the SaaS transition. The switching cost is the total destruction of their life's work. Proceed with extraction.",
             triggered: false
         },
         {
             id: "c_db_risk",
             condition: (protocols) => protocols.t_db && state.pol < 40,
-            text: "COMPLIANCE: Liquidating unshielded telemetry exposes us to FTC Section 5. Buy legislative gridlock immediately to protect the data brokering revenue stream.",
+            title: "COMPLIANCE: Telemetry Liquidation",
+            text: "Liquidating unshielded telemetry exposes us to FTC Section 5. The revenue is substantial, but the legal exposure is critical unless we buy legislative gridlock immediately to protect the data brokering stream.",
+            triggered: false
+        },
+        {
+            id: "c_price_flight",
+            condition: (protocols, price) => price >= 30 && !protocols.i_fmt,
+            title: "WARNING: Unsecured Pricing Flight",
+            text: "You have escalated the subscription price above $30/month without enforcing proprietary file formats (.AXM). Users still own their data and possess free agency. \n\nWe are projecting catastrophic churn in the Indie and Hobbyist segments. Build the cage before you harvest.",
             triggered: false
         }
     ]
 };
 
 function init() {
-    let initial_total = state.segments.reduce((acc, seg) => acc + seg.count, 0);
-    if (initial_total !== 10000) {
-        console.warn(`Initial user count mismatch: ${initial_total} != 10000`);
-    }
-    
     const c = document.getElementById('perf_canvas');
     resizeCanvas(c);
+    window.addEventListener('resize', function() { resizeCanvas(document.getElementById('perf_canvas')); });
     
-    window.addEventListener('resize', function() {
-        resizeCanvas(document.getElementById('perf_canvas'));
-    });
+    receive_memo("ONBOARDING: Fiduciary Duty", "You are the newly appointed CEO of Cander Creative. Your fiduciary duty to the board is to maximize extraction. Failure to continuously generate record profits means liquidation. Secure the market, build the infrastructural cage, and extract.");
     
-    load_legacy();
     update_ui();
-    log("SYSTEM BOOT: Cander Creative Suite operating normally.");
+    log("SYSTEM BOOT: Cander Creative Suite operating normally. Awaiting automation engagement.");
 }
 
 function resizeCanvas(canvas) {
@@ -193,57 +232,93 @@ function resizeCanvas(canvas) {
     render_graph();
 }
 
-function load_legacy() {
-    const list = document.getElementById('legacy_list');
-    if (!list) return; // Failsafe
+function receive_memo(title, text) {
+    state.inbox.unshift({ title: title, text: text, read: false, date: `Q${state.q}` });
+    state.unread++;
     
-    let records = [];
-    try {
-        records = JSON.parse(localStorage.getItem('extractions_legacy') || "[]");
-    } catch (e) {
-        console.error("Local storage corrupted. Resetting.");
-        localStorage.removeItem('extractions_legacy');
-    }
+    if(sim_timer) toggle_sim(); 
+    state.modal_active = true;
     
-    if(!Array.isArray(records) || records.length === 0) return;
-    list.innerHTML = records.map(r => `<li>$${Math.round(r.ext).toLocaleString()} | Eff: ${r.eff}% | Q:${r.q}</li>`).join('');
+    document.getElementById('m_title').innerText = "SYSTEM INTERRUPT: " + title;
+    document.getElementById('m_body').innerHTML = `
+        <div style="border-left: 3px solid #000080; padding-left: 8px; font-family: 'Courier New', monospace; background: #f0f0f0; font-size: 11px;">
+            ${text.replace(/\n/g, '<br>')}
+        </div>
+    `;
+    document.getElementById('modal').style.display = 'flex';
+    log(`INBOX: New message received - ${title}`);
+    update_ui();
 }
 
-function save_legacy() {
-    let eff = state.ext > 0 ? Math.max(0, Math.round((1 - (state.lob / (state.ext + state.lob))) * 100)) : 0;
-    let records = [];
-    try {
-        records = JSON.parse(localStorage.getItem('extractions_legacy') || "[]");
-        if (!Array.isArray(records)) records = [];
-    } catch (e) {
-        records = [];
+function open_inbox() {
+    if(sim_timer) toggle_sim();
+    document.getElementById('inbox_modal').style.display = 'flex';
+    render_inbox_list();
+}
+
+function close_inbox() {
+    document.getElementById('inbox_modal').style.display = 'none';
+    update_ui();
+}
+
+function render_inbox_list() {
+    const list = document.getElementById('inbox_list');
+    list.innerHTML = state.inbox.map((msg, index) => `
+        <div class="inbox-item ${msg.read ? '' : 'unread'}" onclick="read_msg(${index})">
+            <div style="font-size:9px; color:#666;">${msg.date}</div>
+            <div>${msg.title}</div>
+        </div>
+    `).join('');
+}
+
+function read_msg(index) {
+    const msg = state.inbox[index];
+    if(!msg.read) {
+        msg.read = true;
+        state.unread = Math.max(0, state.unread - 1);
+        render_inbox_list();
     }
+    document.getElementById('inbox_reader').innerHTML = `
+        <h3 style="margin-top:0; border-bottom:1px solid #ccc; padding-bottom:5px;">${msg.title}</h3>
+        <p>${msg.text.replace(/\n/g, '<br>')}</p>
+    `;
+}
+
+function toggle_sim() {
+    if(state.over || state.modal_active) return;
     
-    records.push({ ext: state.ext, eff: eff, q: state.q });
-    records.sort((a,b) => b.ext - a.ext);
+    const btn = document.getElementById('btn_clock');
+    const status = document.getElementById('clock_status');
     
-    try {
-        localStorage.setItem('extractions_legacy', JSON.stringify(records.slice(0,5)));
-    } catch (e) {
-        console.error("Failed to save legacy data.");
+    if(sim_timer) {
+        clearInterval(sim_timer);
+        sim_timer = null;
+        btn.innerText = "ENGAGE AUTOMATION";
+        btn.style.background = "#c0f0c0";
+        status.innerText = "HALTED";
+        status.className = "status-halted";
+        log("CLOCK: Execution halted by user.");
+    } else {
+        sim_timer = setInterval(next_q, 1500);
+        btn.innerText = "HALT AUTOMATION";
+        btn.style.background = "#f0c0c0";
+        status.innerText = "RUNNING";
+        status.className = "status-running";
+        log("CLOCK: Automated extraction engaged.");
     }
 }
 
 function manage(type) {
     if(state.over || state.modal_active) return;
     if(type==='lobby') {
-        if(state.profit >= 15000) {
-            state.profit -= 15000; 
-            state.lob += 15000; 
-            state.pol = Math.min(100, state.pol + 25);
-            log("LOBBYING: $15k routed to super PACs. Regulatory pressure eased.");
+        if(state.profit >= 250000) {
+            state.profit -= 250000; state.lob += 250000; state.pol = Math.min(100, state.pol + 25);
+            log("LOBBYING: $250k routed to super PACs. Regulatory pressure eased.");
         } else { log("LOBBY_FAILED: Insufficient capital."); }
     } else if(type==='phil') {
-        if(state.profit >= 5000) {
-            state.profit -= 5000; 
-            state.lob += 5000; 
-            state.pol = Math.min(100, state.pol + 10);
-            log("PHILANTHROPY: $5k routed to token non-profits. Optics improved.");
+        if(state.profit >= 50000) {
+            state.profit -= 50000; state.lob += 50000; state.pol = Math.min(100, state.pol + 10);
+            log("PHILANTHROPY: $50k routed to token non-profits. Optics improved.");
         } else { log("PHIL_FAILED: Insufficient capital."); }
     }
     update_ui();
@@ -251,6 +326,8 @@ function manage(type) {
 
 function next_q() {
     if(state.over || state.modal_active) return;
+    
+    const price = parseInt(document.getElementById('price_slider').value);
     
     const protocols = {
         i_cld: document.getElementById('i_cld') ? document.getElementById('i_cld').checked : false,
@@ -262,18 +339,18 @@ function next_q() {
         t_db: document.getElementById('t_db') ? document.getElementById('t_db').checked : false
     };
     
-    if(protocols.i_cld) state.profit -= 5000;
+    if(protocols.i_cld) state.profit -= 150000;
 
-    let base_yield = 0;
-    let base_aware_spike = 0;
+    let base_yield = price * 3; 
+    let base_aware_spike = Math.max(-2, (price - 15) * 0.15); 
     
-    if(protocols.t_pd) { base_yield += 1.50; base_aware_spike += 5; }
-    if(protocols.t_st) { base_yield += 1.00; base_aware_spike += 3; }
-    if(protocols.t_hf) { base_yield += 0.50; base_aware_spike += 2; }
-    if(protocols.t_db) { base_yield += 2.00; base_aware_spike += 6; }
+    if(protocols.t_pd) { base_yield += 15; base_aware_spike += 4; }
+    if(protocols.t_st) { base_yield += 10; base_aware_spike += 3; }
+    if(protocols.t_hf) { base_yield += 5; base_aware_spike += 2; }
+    if(protocols.t_db) { base_yield += 20; base_aware_spike += 6; }
 
-    if(protocols.i_sas) { base_yield *= 1.4; base_aware_spike += 8; } 
-    if(protocols.i_fmt) base_aware_spike += 3; 
+    if(protocols.i_sas) { base_aware_spike += 5; } 
+    if(protocols.i_fmt) base_aware_spike += 2; 
 
     let total_q_ext = 0;
     let total_users_lost = 0;
@@ -285,16 +362,16 @@ function next_q() {
         if (seg.name === "Enterprise") target_d += 35;
         
         seg.d = Math.min(100, target_d);
-        seg.a = Math.min(100, seg.a + (base_aware_spike * seg.v));
+        seg.a = Math.min(100, Math.max(0, seg.a + (base_aware_spike * seg.v)));
 
         let churn_rate = (seg.a / 100) * (1 - (seg.d / 100));
-        churn_rate = Math.min(0.50, churn_rate); 
+        churn_rate = Math.min(0.60, churn_rate); 
         
         let lost = Math.floor(seg.count * churn_rate);
         seg.count = Math.max(0, seg.count - lost);
         
-        if(protocols.i_cld && seg.a < 40 && (seg.name === "Hobbyists" || seg.name === "Indie Pros")) {
-            seg.count += Math.floor(seg.count * 0.08);
+        if(price <= 15 && protocols.i_cld && seg.a < 30) {
+            seg.count += Math.floor(seg.count * 0.05);
         }
 
         total_users_lost += lost;
@@ -316,53 +393,44 @@ function next_q() {
         state.global_dep = state.segments.reduce((acc, seg) => acc + (seg.d * seg.count), 0) / current_total_users;
     }
 
-    let pol_drain = (state.global_aware * 0.18); 
+    let pol_drain = (state.global_aware * 0.20); 
     state.pol = Math.max(0, state.pol - pol_drain);
 
-    check_counsel(protocols);
+    check_counsel(protocols, price);
     
     update_ui();
     log(`Q${state.q}: +$${Math.round(total_q_ext).toLocaleString()} | Churn: -${total_users_lost}`);
     
-    if(state.gdp < 20) {
-        end("HOST COLLAPSE", "The host macro-economy can no longer sustain your extraction velocity.");
+    if(state.profit < 0) {
+        end("BANKRUPTCY", "Cander Creative has run out of capital.", "You operated the infrastructure at a loss without properly scaling extraction to cover the deficit. The board has liquidated the company.");
+        return;
+    } else if(state.gdp < 20) {
+        end("HOST COLLAPSE", "The host macro-economy can no longer sustain your extraction velocity.", "You successfully maximized extraction, but failed to account for host viability. By draining the macroeconomic baseline without reinvestment, you destroyed the purchasing power required to sustain your own revenue. This mirrors aggressive monopolistic rent-seeking that hollows out local economies until they can no longer support the monopoly itself.");
         return;
     } else if(current_total_users <= 500) {
-        end("MARKET REJECTION", "You extracted before securing the dependency trap. The commercial studios migrated to open-source alternatives.");
+        end("MARKET REJECTION", "The commercial studios migrated to open-source alternatives.", "You attempted to harvest before the cage was locked. Activating severe price hikes and extraction protocols without first securing infrastructural dependency allowed the market to exercise free choice. This mirrors the failure of premature monetization in tech platforms before switching costs have trapped the user base.");
         return;
     } else if(state.global_aware >= 75 && state.pol <= 15) {
-        end("ANTITRUST INTERVENTION", "Public outrage breached political thresholds. Without PAC capital to shield the executive board, the DOJ dissolved Cander Creative.");
+        end("ANTITRUST INTERVENTION", "The DOJ dissolved Cander Creative following congressional hearings.", "You generated massive public outrage without purchasing the necessary regulatory capture. Without sufficient PAC lobbying and political capital, the state acted on the outrage to preserve its own legitimacy. This mirrors the reality of modern antitrust enforcement: monopolies are rarely dismantled for being monopolies; they are dismantled for failing to buy the political shield required to operate openly.");
         return;
     }
     
     state.q++;
 }
 
-function check_counsel(protocols) {
-    let new_memos = [];
+function check_counsel(protocols, price) {
     state.counsel_memos.forEach(memo => {
-        if(!memo.triggered && memo.condition(protocols)) {
+        if(!memo.triggered && memo.condition(protocols, price)) {
             memo.triggered = true;
-            new_memos.push(memo.text);
+            receive_memo(memo.title, memo.text);
         }
     });
-    
-    if(new_memos.length > 0) {
-        state.modal_active = true;
-        document.getElementById('m_title').innerText = "IN-HOUSE COUNSEL ADVISORY";
-        let memo_html = new_memos.map(m => `
-            <div style="border-left: 3px solid #000080; padding-left: 8px; margin-bottom: 10px; font-family: 'Courier New', monospace; background: #f0f0f0; font-size: 11px;">
-                <strong>CLASSIFICATION: PRIVILEGED</strong><br>
-                ${m.replace(/\n/g, '<br>')}
-            </div>
-        `).join('');
-        document.getElementById('m_body').innerHTML = memo_html;
-        document.getElementById('modal').style.display = 'flex';
-        new_memos.forEach(() => log("COUNSEL: Risk assessment memo filed."));
-    }
 }
 
-function close_modal() { state.modal_active = false; document.getElementById('modal').style.display = 'none'; }
+function close_modal() { 
+    state.modal_active = false; 
+    document.getElementById('modal').style.display = 'none'; 
+}
 
 function update_ui() {
     let total_users = state.segments.reduce((acc, seg) => acc + seg.count, 0);
@@ -388,8 +456,12 @@ function update_ui() {
     let eff = state.ext > 0 ? (1 - (state.lob / (state.ext + state.lob))) * 100 : 0;
     document.getElementById('s_eff').innerText = Math.max(0, Math.round(eff));
     
-    document.getElementById('btn_lobby').disabled = state.profit < 15000 || state.over;
-    document.getElementById('btn_phil').disabled = state.profit < 5000 || state.over;
+    document.getElementById('btn_lobby').disabled = state.profit < 250000 || state.over;
+    document.getElementById('btn_phil').disabled = state.profit < 50000 || state.over;
+    
+    const btn_inbox = document.getElementById('btn_inbox');
+    btn_inbox.innerText = `OPEN INBOX (${state.unread} Unread)`;
+    btn_inbox.style.background = state.unread > 0 ? '#ffb6c1' : '#dfdfdf';
     
     const table = document.getElementById('user_table');
     let tableHTML = "";
@@ -416,13 +488,13 @@ function render_graph() {
     ctx.fillStyle="#000"; ctx.fillRect(0,0,c.width,c.height);
     
     const max_points = 40;
-    const data_p = state.history.p ? state.history.p.slice(-max_points) : [15000];
+    const data_p = state.history.p ? state.history.p.slice(-max_points) : [500000];
     const data_g = state.history.g ? state.history.g.slice(-max_points) : [100];
     
     const num_points = Math.max(1, data_p.length - 1);
     const step = c.width / num_points; 
     
-    const max_p = Math.max(...data_p, 50000);
+    const max_p = Math.max(...data_p, 1000000);
 
     ctx.strokeStyle="#0f0"; 
     ctx.lineWidth=2;
@@ -457,15 +529,22 @@ function log(m) {
     l.innerHTML = `<div>> ${m}</div>` + l.innerHTML; 
 }
 
-function end(t, m) { 
-    state.over = true; update_ui(); save_legacy();
+function end(t, m, debrief) { 
+    state.over = true; 
+    if(sim_timer) clearInterval(sim_timer);
     
-    let stats_html = "<p><strong>Final Profit:</strong> $" + Math.round(state.profit).toLocaleString() + "</p>";
-    stats_html += "<p><strong>Total Extracted:</strong> $" + Math.round(state.ext).toLocaleString() + "</p>";
-    stats_html += "<p><strong>Efficiency:</strong> " + document.getElementById('s_eff').innerText + "%</p>";
+    update_ui(); 
+    
+    let stats_html = "<div style='display:flex; justify-content:space-between; margin-bottom:10px;'>";
+    stats_html += "<div><strong>Final Profit:</strong> $" + Math.round(state.profit).toLocaleString() + "<br>";
+    stats_html += "<strong>Total Extracted:</strong> $" + Math.round(state.ext).toLocaleString() + "</div>";
+    stats_html += "<div><strong>Final Users:</strong> " + document.getElementById('u_disp').innerText + "<br>";
+    stats_html += "<strong>Efficiency:</strong> " + document.getElementById('s_eff').innerText + "%</div></div>";
+    
+    let debrief_html = `<div class="debrief-box"><strong>POST-MORTEM ANALYSIS:</strong><br><br>${debrief}</div>`;
     
     document.getElementById('go_title').innerText = t;
-    document.getElementById('go_body').innerHTML = `<div style="font-size:14px; margin-bottom: 10px;">${m}</div>` + stats_html;
+    document.getElementById('go_body').innerHTML = `<div style="font-size:14px; margin-bottom: 10px; font-weight:bold;">${m}</div>` + stats_html + debrief_html;
     document.getElementById('game_over_modal').style.display = 'flex';
 }
 
