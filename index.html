@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>EXTRACTION ECONOMY v4.1 - Cander Creative Master</title>
+<title>EXTRACTION ECONOMY v4.2 - Sequential Trap Enforcement</title>
 <style>
     :root {
         --win-bg: #c0c0c0; --win-high: #ffffff; --win-shadow: #808080;
@@ -15,7 +15,8 @@
     .inset-panel { box-shadow: inset 1px 1px var(--win-shadow), inset -1px -1px var(--win-high); padding: 6px; background: #dfdfdf; }
     
     .protocol-label { position: relative; cursor: help; border-bottom: 1px dotted #333; display: block; padding: 4px 2px; font-size: 10px; line-height: 1.2; }
-    .protocol-label:hover::after {
+    .protocol-label.locked { color: #888; cursor: not-allowed; }
+    .protocol-label:not(.locked):hover::after {
         content: attr(data-tip); position: absolute; left: 20px; top: 25px; width: max-content; max-width: 240px; 
         background: #ffffe1; border: 1px solid #000; padding: 6px; z-index: 100; font-weight: bold; color: #800000; font-size: 11px; font-family: 'Courier New', monospace; box-shadow: 2px 2px 0px rgba(0,0,0,0.5);
     }
@@ -51,7 +52,7 @@
 <body>
 
 <div class="window" style="max-width: 1250px; margin: 0 auto;">
-    <div class="title-bar"><span>CANDER_OPERATIONAL_TERMINAL_v4.1</span><span>[X]</span></div>
+    <div class="title-bar"><span>CANDER_OPERATIONAL_TERMINAL_v4.2</span><span>[X]</span></div>
     
     <div class="content-area">
         <div class="cander-logo">
@@ -86,9 +87,9 @@
                 <div class="window">
                     <div class="title-bar" style="background:#4a90e2;">INFRASTRUCTURE LOCK-IN (THE CAGE)</div>
                     <div class="content-area inset-panel">
-                        <label class="protocol-label" data-tip="INDUSTRY TERM: Subsidized Acquisition / Loss Leader"><input type="checkbox" id="i_cld"> Operate cloud storage at a loss (-$150k/qtr) to drive initial adoption and limit churn.</label>
-                        <label class="protocol-label" data-tip="INDUSTRY TERM: Proprietary Format Lock-In"><input type="checkbox" id="i_fmt"> Deprecate standard file exports. Force users to save work exclusively within our closed ecosystem.</label>
-                        <label class="protocol-label" data-tip="INDUSTRY TERM: Software-as-a-Service (SaaS) Transition"><input type="checkbox" id="i_sas"> Revoke previously sold perpetual licenses and require monthly cloud authentication.</label>
+                        <label class="protocol-label" data-tip="INDUSTRY TERM: Subsidized Acquisition / Loss Leader"><input type="checkbox" id="i_cld" onchange="update_locks()"> Operate cloud storage at a loss (-$150k/qtr) to drive initial adoption and migrate local files to our servers.</label>
+                        <label class="protocol-label locked" id="lbl_fmt" data-tip="INDUSTRY TERM: Proprietary Format Lock-In"><input type="checkbox" id="i_fmt" disabled onchange="update_locks()"> Deprecate standard file exports. Force users to save work exclusively within our closed ecosystem. <span style="color:#800000;">[Requires Cloud Storage]</span></label>
+                        <label class="protocol-label locked" id="lbl_sas" data-tip="INDUSTRY TERM: Software-as-a-Service (SaaS) Transition"><input type="checkbox" id="i_sas" disabled onchange="update_locks()"> Revoke previously sold perpetual licenses and require monthly cloud authentication. <span style="color:#800000;">[Requires Format Lock]</span></label>
                     </div>
                 </div>
 
@@ -221,6 +222,7 @@ function init() {
     
     receive_memo("ONBOARDING: Fiduciary Duty", "You are the newly appointed CEO of Cander Creative. Your fiduciary duty to the board is to maximize extraction. Failure to continuously generate record profits means liquidation. Secure the market, build the infrastructural cage, and extract.");
     
+    update_locks();
     update_ui();
     log("SYSTEM BOOT: Cander Creative Suite operating normally. Awaiting automation engagement.");
 }
@@ -230,6 +232,32 @@ function resizeCanvas(canvas) {
     canvas.width = canvas.clientWidth;
     canvas.height = canvas.clientHeight;
     render_graph();
+}
+
+function update_locks() {
+    const cld = document.getElementById('i_cld');
+    const fmt = document.getElementById('i_fmt');
+    const sas = document.getElementById('i_sas');
+    const lbl_fmt = document.getElementById('lbl_fmt');
+    const lbl_sas = document.getElementById('lbl_sas');
+
+    if (!cld.checked) {
+        fmt.checked = false;
+        fmt.disabled = true;
+        lbl_fmt.classList.add('locked');
+    } else {
+        fmt.disabled = false;
+        lbl_fmt.classList.remove('locked');
+    }
+
+    if (!fmt.checked) {
+        sas.checked = false;
+        sas.disabled = true;
+        lbl_sas.classList.add('locked');
+    } else {
+        sas.disabled = false;
+        lbl_sas.classList.remove('locked');
+    }
 }
 
 function receive_memo(title, text) {
