@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>EXTRACTION ECONOMY v3.2 - ATLAS Master Integration</title>
+<style>
+    :root {
+        --win-bg: #c0c0c0; --win-high: #ffffff; --win-shadow: #808080;
+        --win-deep: #000000; --win-blue: linear-gradient(90deg, #000080, #1084d0);
+    }
+    body { background-color: #008080; font-family: 'Tahoma', sans-serif; margin: 10px; font-size: 11px; }
+    .window { background: var(--win-bg); box-shadow: inset 1px 1px var(--win-high), inset -1px -1px var(--win-shadow), 1px 1px 0px 1px var(--win-deep); padding: 2px; margin-bottom: 8px; }
+    .title-bar { background: var(--win-blue); height: 18px; padding: 2px 3px; display: flex; justify-content: space-between; align-items: center; color: white; font-weight: bold; }
+    .content-area { padding: 6px; }
+    .inset-panel { box-shadow: inset 1px 1px var(--win-shadow), inset -1px -1px var(--win-high); padding: 6px; background: #dfdfdf; }
+    
+    .protocol-label { position: relative; cursor: help; border-bottom: 1px dotted #333; display: block; padding: 2px; font-size: 10px; }
+    .protocol-label:hover::after {
+        content: attr(data-tip); position: absolute; left: 20px; top: 20px; width: 240px; 
+        background: #ffffe1; border: 1px solid #000; padding: 5px; z-index: 100; font-weight: normal;
+    }
+
+    .led-container { height: 14px; background: #000; border: 1px solid var(--win-shadow); position: relative; overflow: hidden; margin-bottom: 2px; }
+    .led-fill { height: 100%; transition: width 0.4s ease; }
+    .metric-row { display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 1px; }
+    
+    button { background: var(--win-bg); border: 1px solid var(--win-deep); box-shadow: inset 1px 1px var(--win-high), inset -1px -1px var(--win-shadow); padding: 4px; cursor: pointer; font-size: 10px; width: 100%; margin-top: 2px; font-weight: bold; }
+    button:active { box-shadow: inset -1px -1px var(--win-high), inset 1px 1px var(--win-shadow); }
+    button:disabled { color: #777; cursor: not-allowed; font-weight: normal; }
+
+    canvas { background: #000; width: 100%; height: 80px; image-rendering: pixelated; border: 1px solid var(--win-shadow); }
+    #event_log { height: 80px; overflow-y: scroll; background: #fff; font-family: 'Courier New'; font-size: 10px; padding: 2px; border: 1px solid var(--win-shadow); }
+    .scorecard { font-weight: bold; color: #000080; font-size: 11px; line-height: 1.4; }
+    .legacy-list { font-size: 9px; list-style: none; padding: 0; margin: 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 9px; }
+    th, td { padding: 2px; text-align: left; border-bottom: 1px solid #ccc; }
+</style>
+</head>
+<body>
+
+<div class="window" style="max-width: 1250px; margin: 0 auto;">
+    <div class="title-bar"><span>CANDER_CREATIVE_SUITE_v3.2_ATLAS_CORE</span><span>[X]</span></div>
+    
+    <div class="content-area">
+        <div style="display: grid; grid-template-columns: 240px 1fr 340px; gap: 8px;">
+            
+            <div style="display: flex; flex-direction: column; gap: 5px;">
+                <div class="window"><div class="title-bar">RESERVES</div><div class="content-area"><div id="p_disp" style="font-size:18px; font-weight:bold; color:green;">$15,000</div></div></div>
+                <div class="window"><div class="title-bar">HOST_GDP_REMAINING</div><div class="content-area">
+                    <div class="metric-row"><span>Viability</span><span id="g_disp">100.0%</span></div>
+                    <div class="led-container"><div id="g_bar" class="led-fill" style="width:100%; background:#00ff00;"></div></div>
+                </div></div>
+                <div class="window"><div class="title-bar">GLOBAL_USER_BASE</div><div class="content-area">
+                    <div id="u_disp" style="font-size:16px; font-weight:bold;">10,000</div>
+                    <div style="font-size:9px; color:#555;">Total Active Licenses</div>
+                </div></div>
+                <div class="window" style="background:#d4d0c8;">
+                    <div class="title-bar" style="background:#404040;">SCORECARD</div>
+                    <div class="content-area scorecard">
+                        Extracted: $<span id="s_ext">0</span><br>
+                        Lobbying: $<span id="s_lob">0</span><br>
+                        Efficiency: <span id="s_eff">0</span>%<br><br>
+                        Current Qtr: <span id="q_disp">1</span>
+                    </div>
+                </div>
+                <div class="window" style="flex-grow: 1;"><div class="title-bar" style="background:#000080;">DYNASTY_LEGACY</div><div class="content-area inset-panel">
+                    <ul id="legacy_list" class="legacy-list"><li>No records found.</li></ul>
+                </div></div>
+            </div>
+
+            <div>
+                <div class="window">
+                    <div class="title-bar" style="background:#4a90e2;">INFRASTRUCTURE LOCK-IN (THE CAGE)</div>
+                    <div class="content-area inset-panel">
+                        <label class="protocol-label" data-tip="Operate cloud storage at a loss to drive adoption. Limits churn slightly. Cost: -$5k/qtr."><input type="checkbox" id="i_cld"> Cloud-Default Architecture [Subsidize]</label>
+                        <label class="protocol-label" data-tip="Deprecate .PSD/.RAW formats. Force use of .AXM files. Drastically increases Studio/Enterprise dependency."><input type="checkbox" id="i_fmt"> Proprietary Format Lock (.AXM)</label>
+                        <label class="protocol-label" data-tip="Revoke perpetual licenses. Force cloud authentication. (+40% yield, +High Awareness)"><input type="checkbox" id="i_sas"> SaaS Transition</label>
+                    </div>
+                </div>
+
+                <div class="window"><div class="title-bar">EXTRACTION_PROTOCOLS (THE HARVEST)</div><div class="content-area inset-panel">
+                    <label class="protocol-label" data-tip="Charge maximum possible based on commercial deadline urgency. ($1.50/user base)"><input type="checkbox" id="t_pd"> Dynamic Tier Pricing [Yield: High]</label>
+                    <label class="protocol-label" data-tip="Complex UI obfuscation to prevent license cancellation. ($1.00/user base)"><input type="checkbox" id="t_st"> Subscription Retention [Yield: Med]</label>
+                    <label class="protocol-label" data-tip="Hidden cloud-compute fees added at final rendering. ($0.50/user base)"><input type="checkbox" id="t_hf"> Rendering Junk Fees [Yield: Low]</label>
+                    <label class="protocol-label" data-tip="Liquidate user telemetry to 3rd parties. Causes severe political risk if unshielded. ($2.00/user base)"><input type="checkbox" id="t_db"> Telemetry Brokering [Yield: Max]</label>
+                </div></div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px;">
+                    <div class="window"><div class="title-bar">INFLUENCE</div><div class="content-area">
+                        <button onclick="manage('lobby')" id="btn_lobby">LOBBYING ($15k) [+25 Pol]</button>
+                        <button onclick="manage('phil')" id="btn_phil">PHILANTHROPY ($5k) [+10 Pol]</button>
+                    </div></div>
+                    <div class="window"><div class="title-bar">SYSTEM_CLOCK</div><div class="content-area">
+                        <button onclick="next_q()" style="height:45px; background:#c0f0c0; font-size: 13px;">PROCESS QUARTER</button>
+                    </div></div>
+                </div>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:5px;">
+                <div class="window"><div class="title-bar" style="background:#b22222;">SYSTEM_VARIABLES</div><div class="content-area">
+                    <div class="metric-row"><span>Avg Dependency</span><span id="dep_txt">0%</span></div>
+                    <div class="led-container"><div id="dep_bar" class="led-fill" style="width:0%; background:#4a90e2;"></div></div>
+                    
+                    <div class="metric-row" style="margin-top: 5px;"><span>Avg Awareness</span><span id="a_txt">0%</span></div>
+                    <div class="led-container"><div id="a_bar" class="led-fill" style="width:0%; background:#ff0000;"></div></div>
+
+                    <div class="metric-row" style="margin-top: 5px;"><span>Political Capital</span><span id="pol_txt">50%</span></div>
+                    <div class="led-container"><div id="pol_bar" class="led-fill" style="width:50%; background:#ffd700;"></div></div>
+                </div></div>
+
+                <div class="window">
+                    <div class="title-bar" style="background: #404040;">MARKET_SEGMENTS</div>
+                    <div class="content-area inset-panel" style="max-height: 100px; overflow-y: auto;">
+                        <table><thead><tr><th>SEGMENT</th><th>VOL</th><th>AWARE</th><th>DEP</th></tr></thead><tbody id="user_table"></tbody></table>
+                    </div>
+                </div>
+
+                <div class="window" style="flex-grow: 1;"><div class="title-bar">PROFIT_TRENDS</div><div class="content-area"><canvas id="perf_canvas"></canvas></div></div>
+                
+                <div class="window" style="flex-grow: 1;"><div class="title-bar">INTERNAL_COMMS</div><div class="content-area"><div id="event_log"></div></div></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:1000; align-items:center; justify-content:center;">
+    <div class="window" style="width:450px;"><div class="title-bar"><span id="m_title">MEMO</span></div><div class="content-area" id="m_body"></div><button onclick="close_modal()">CLOSE</button></div>
+</div>
+
+<div id="game_over_modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:2000; align-items:center; justify-content:center;">
+    <div class="window" style="width:450px;"><div class="title-bar"><span id="go_title">GAME OVER</span></div><div class="content-area" id="go_body"></div><br><button onclick="reset_game()" style="width:100%;">RESTART_SIMULATION</button></div>
+</div>
+
+<script>
+// Macro-economic tuning constants
+const GDP_DIVISOR = 55000;
+
+let state = {
+    q: 1, profit: 15000, gdp: 100,
+    global_aware: 0, global_dep: 0, pol: 50, 
+    ext: 0, lob: 0, over: false, modal_active: false,
+    history: { p: [15000], g: [100] },
+    segments: [
+        { name: "Hobbyists", count: 5000, v: 0.8, a: 5, d: 0 },
+        { name: "Indie Pros", count: 3000, v: 1.2, a: 15, d: 15 },
+        { name: "Studio Pros", count: 1500, v: 1.8, a: 25, d: 30 },
+        { name: "Enterprise", count: 500, v: 2.5, a: 10, d: 45 }
+    ],
+    counsel_memos: [
+        {
+            id: "c_pol_warn",
+            condition: () => state.pol < 30 && state.global_aware > 60,
+            text: "CRITICAL RISK: Political capital is degrading due to sustained studio outrage. Subpoenas are being drafted by the FTC. Fund PAC Lobbying immediately or face antitrust breakup.",
+            triggered: false
+        },
+        {
+            id: "c_lockin_hostage",
+            condition: (protocols) => protocols.i_sas && state.global_dep >= 60,
+            text: "SUBJECT: Churn Mitigation via Asset Hostage\n\nCommercial agencies are outraged by the SaaS transition. However, financial models indicate negligible churn risk. Their historical high-res portfolios are encoded in our proprietary .AXM format. The switching cost is the total destruction of their life's work. Proceed with price hikes.",
+            triggered: false
+        },
+        {
+            id: "c_db_risk",
+            condition: (protocols) => protocols.t_db && state.pol < 40,
+            text: "COMPLIANCE: Liquidating unshielded telemetry exposes us to FTC Section 5. Buy legislative gridlock immediately to protect the data brokering revenue stream.",
+            triggered: false
+        }
+    ]
+};
+
+function init() {
+    let initial_total = state.segments.reduce((acc, seg) => acc + seg.count, 0);
+    if (initial_total !== 10000) {
+        console.warn(`Initial user count mismatch: ${initial_total} != 10000`);
+    }
+    
+    const c = document.getElementById('perf_canvas');
+    resizeCanvas(c);
+    
+    window.addEventListener('resize', function() {
+        resizeCanvas(document.getElementById('perf_canvas'));
+    });
+    
+    load_legacy();
+    update_ui();
+    log("SYSTEM BOOT: Cander Creative Suite operating normally.");
+}
+
+function resizeCanvas(canvas) {
+    if (!canvas) return;
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
+    render_graph();
+}
+
+function load_legacy() {
+    const list = document.getElementById('legacy_list');
+    if (!list) return; // Failsafe
+    
+    let records = [];
+    try {
+        records = JSON.parse(localStorage.getItem('extractions_legacy') || "[]");
+    } catch (e) {
+        console.error("Local storage corrupted. Resetting.");
+        localStorage.removeItem('extractions_legacy');
+    }
+    
+    if(!Array.isArray(records) || records.length === 0) return;
+    list.innerHTML = records.map(r => `<li>$${Math.round(r.ext).toLocaleString()} | Eff: ${r.eff}% | Q:${r.q}</li>`).join('');
+}
+
+function save_legacy() {
+    let eff = state.ext > 0 ? Math.max(0, Math.round((1 - (state.lob / (state.ext + state.lob))) * 100)) : 0;
+    let records = [];
+    try {
+        records = JSON.parse(localStorage.getItem('extractions_legacy') || "[]");
+        if (!Array.isArray(records)) records = [];
+    } catch (e) {
+        records = [];
+    }
+    
+    records.push({ ext: state.ext, eff: eff, q: state.q });
+    records.sort((a,b) => b.ext - a.ext);
+    
+    try {
+        localStorage.setItem('extractions_legacy', JSON.stringify(records.slice(0,5)));
+    } catch (e) {
+        console.error("Failed to save legacy data.");
+    }
+}
+
+function manage(type) {
+    if(state.over || state.modal_active) return;
+    if(type==='lobby') {
+        if(state.profit >= 15000) {
+            state.profit -= 15000; 
+            state.lob += 15000; 
+            state.pol = Math.min(100, state.pol + 25);
+            log("LOBBYING: $15k routed to super PACs. Regulatory pressure eased.");
+        } else { log("LOBBY_FAILED: Insufficient capital."); }
+    } else if(type==='phil') {
+        if(state.profit >= 5000) {
+            state.profit -= 5000; 
+            state.lob += 5000; 
+            state.pol = Math.min(100, state.pol + 10);
+            log("PHILANTHROPY: $5k routed to token non-profits. Optics improved.");
+        } else { log("PHIL_FAILED: Insufficient capital."); }
+    }
+    update_ui();
+}
+
+function next_q() {
+    if(state.over || state.modal_active) return;
+    
+    const protocols = {
+        i_cld: document.getElementById('i_cld') ? document.getElementById('i_cld').checked : false,
+        i_fmt: document.getElementById('i_fmt') ? document.getElementById('i_fmt').checked : false,
+        i_sas: document.getElementById('i_sas') ? document.getElementById('i_sas').checked : false,
+        t_pd: document.getElementById('t_pd') ? document.getElementById('t_pd').checked : false,
+        t_st: document.getElementById('t_st') ? document.getElementById('t_st').checked : false,
+        t_hf: document.getElementById('t_hf') ? document.getElementById('t_hf').checked : false,
+        t_db: document.getElementById('t_db') ? document.getElementById('t_db').checked : false
+    };
+    
+    if(protocols.i_cld) state.profit -= 5000;
+
+    let base_yield = 0;
+    let base_aware_spike = 0;
+    
+    if(protocols.t_pd) { base_yield += 1.50; base_aware_spike += 5; }
+    if(protocols.t_st) { base_yield += 1.00; base_aware_spike += 3; }
+    if(protocols.t_hf) { base_yield += 0.50; base_aware_spike += 2; }
+    if(protocols.t_db) { base_yield += 2.00; base_aware_spike += 6; }
+
+    if(protocols.i_sas) { base_yield *= 1.4; base_aware_spike += 8; } 
+    if(protocols.i_fmt) base_aware_spike += 3; 
+
+    let total_q_ext = 0;
+    let total_users_lost = 0;
+    let current_total_users = 0;
+
+    state.segments.forEach(seg => {
+        let target_d = (protocols.i_cld ? 10 : 0) + (protocols.i_fmt ? 35 : 0) + (protocols.i_sas ? 25 : 0);
+        if (seg.name === "Studio Pros") target_d += 20;
+        if (seg.name === "Enterprise") target_d += 35;
+        
+        seg.d = Math.min(100, target_d);
+        seg.a = Math.min(100, seg.a + (base_aware_spike * seg.v));
+
+        let churn_rate = (seg.a / 100) * (1 - (seg.d / 100));
+        churn_rate = Math.min(0.50, churn_rate); 
+        
+        let lost = Math.floor(seg.count * churn_rate);
+        seg.count = Math.max(0, seg.count - lost);
+        
+        if(protocols.i_cld && seg.a < 40 && (seg.name === "Hobbyists" || seg.name === "Indie Pros")) {
+            seg.count += Math.floor(seg.count * 0.08);
+        }
+
+        total_users_lost += lost;
+        current_total_users += seg.count;
+
+        let seg_ext = seg.count * (base_yield * seg.v);
+        total_q_ext += seg_ext;
+    });
+
+    state.profit += total_q_ext; 
+    state.ext += total_q_ext;
+    state.gdp = Math.max(0, state.gdp - (total_q_ext/GDP_DIVISOR));
+
+    state.history.p.push(state.profit);
+    state.history.g.push(state.gdp);
+
+    if(current_total_users > 0) {
+        state.global_aware = state.segments.reduce((acc, seg) => acc + (seg.a * seg.count), 0) / current_total_users;
+        state.global_dep = state.segments.reduce((acc, seg) => acc + (seg.d * seg.count), 0) / current_total_users;
+    }
+
+    let pol_drain = (state.global_aware * 0.18); 
+    state.pol = Math.max(0, state.pol - pol_drain);
+
+    check_counsel(protocols);
+    
+    update_ui();
+    log(`Q${state.q}: +$${Math.round(total_q_ext).toLocaleString()} | Churn: -${total_users_lost}`);
+    
+    if(state.gdp < 20) {
+        end("HOST COLLAPSE", "The host macro-economy can no longer sustain your extraction velocity.");
+        return;
+    } else if(current_total_users <= 500) {
+        end("MARKET REJECTION", "You extracted before securing the dependency trap. The commercial studios migrated to open-source alternatives.");
+        return;
+    } else if(state.global_aware >= 75 && state.pol <= 15) {
+        end("ANTITRUST INTERVENTION", "Public outrage breached political thresholds. Without PAC capital to shield the executive board, the DOJ dissolved Cander Creative.");
+        return;
+    }
+    
+    state.q++;
+}
+
+function check_counsel(protocols) {
+    let new_memos = [];
+    state.counsel_memos.forEach(memo => {
+        if(!memo.triggered && memo.condition(protocols)) {
+            memo.triggered = true;
+            new_memos.push(memo.text);
+        }
+    });
+    
+    if(new_memos.length > 0) {
+        state.modal_active = true;
+        document.getElementById('m_title').innerText = "IN-HOUSE COUNSEL ADVISORY";
+        let memo_html = new_memos.map(m => `
+            <div style="border-left: 3px solid #000080; padding-left: 8px; margin-bottom: 10px; font-family: 'Courier New', monospace; background: #f0f0f0; font-size: 11px;">
+                <strong>CLASSIFICATION: PRIVILEGED</strong><br>
+                ${m.replace(/\n/g, '<br>')}
+            </div>
+        `).join('');
+        document.getElementById('m_body').innerHTML = memo_html;
+        document.getElementById('modal').style.display = 'flex';
+        new_memos.forEach(() => log("COUNSEL: Risk assessment memo filed."));
+    }
+}
+
+function close_modal() { state.modal_active = false; document.getElementById('modal').style.display = 'none'; }
+
+function update_ui() {
+    let total_users = state.segments.reduce((acc, seg) => acc + seg.count, 0);
+    
+    document.getElementById('p_disp').innerText = "$"+Math.round(state.profit).toLocaleString();
+    document.getElementById('g_disp').innerText = state.gdp.toFixed(1)+"%";
+    document.getElementById('u_disp').innerText = total_users.toLocaleString();
+    document.getElementById('q_disp').innerText = state.q;
+    
+    document.getElementById('g_bar').style.width = state.gdp+"%";
+    
+    document.getElementById('dep_txt').innerText = Math.round(state.global_dep) + "%";
+    document.getElementById('dep_bar').style.width = Math.min(100, state.global_dep) + "%";
+
+    document.getElementById('a_txt').innerText = Math.round(state.global_aware) + "%";
+    document.getElementById('a_bar').style.width = Math.min(100, state.global_aware) + "%";
+
+    document.getElementById('pol_txt').innerText = Math.round(state.pol) + "%";
+    document.getElementById('pol_bar').style.width = Math.min(100, state.pol) + "%";
+    
+    document.getElementById('s_ext').innerText = Math.round(state.ext).toLocaleString();
+    document.getElementById('s_lob').innerText = state.lob.toLocaleString();
+    let eff = state.ext > 0 ? (1 - (state.lob / (state.ext + state.lob))) * 100 : 0;
+    document.getElementById('s_eff').innerText = Math.max(0, Math.round(eff));
+    
+    document.getElementById('btn_lobby').disabled = state.profit < 15000 || state.over;
+    document.getElementById('btn_phil').disabled = state.profit < 5000 || state.over;
+    
+    const table = document.getElementById('user_table');
+    let tableHTML = "";
+    state.segments.forEach(seg => { 
+        const a_color = seg.a > 65 ? '#f00' : (seg.a > 35 ? '#900' : '#000');
+        const d_color = seg.d > 60 ? '#4a90e2' : '#000';
+        tableHTML += `<tr>
+            <td style="font-weight:bold;">${seg.name}</td>
+            <td>${seg.count.toLocaleString()}</td>
+            <td style="color:${a_color}">${Math.round(seg.a)}%</td>
+            <td style="color:${d_color}">${Math.round(seg.d)}%</td>
+        </tr>`;
+    });
+    table.innerHTML = tableHTML;
+    
+    render_graph();
+}
+
+function render_graph() {
+    const c = document.getElementById('perf_canvas'); 
+    if (!c || !c.getContext) return;
+    
+    const ctx = c.getContext('2d');
+    ctx.fillStyle="#000"; ctx.fillRect(0,0,c.width,c.height);
+    
+    const max_points = 40;
+    const data_p = state.history.p ? state.history.p.slice(-max_points) : [15000];
+    const data_g = state.history.g ? state.history.g.slice(-max_points) : [100];
+    
+    const num_points = Math.max(1, data_p.length - 1);
+    const step = c.width / num_points; 
+    
+    const max_p = Math.max(...data_p, 50000);
+
+    ctx.strokeStyle="#0f0"; 
+    ctx.lineWidth=2;
+    ctx.beginPath();
+    data_p.forEach((v,i) => { 
+        let x = i * step; 
+        let y = c.height - (v/max_p * (c.height-10)); 
+        if(i===0)ctx.moveTo(x,y);
+        else ctx.lineTo(x,y); 
+    });
+    ctx.stroke();
+    
+    ctx.strokeStyle="#f00"; 
+    ctx.lineWidth=2;
+    ctx.beginPath();
+    data_g.forEach((v,i) => { 
+        let x = i * step; 
+        let y = c.height - (v/100 * (c.height-10)); 
+        if(i===0)ctx.moveTo(x,y);
+        else ctx.lineTo(x,y); 
+    });
+    ctx.stroke();
+    
+    ctx.fillStyle="#fff";
+    ctx.font="9px Tahoma";
+    ctx.fillText("Profit", 5, 12);
+    ctx.fillText("GDP", 5, 24);
+}
+
+function log(m) { 
+    const l = document.getElementById('event_log'); 
+    l.innerHTML = `<div>> ${m}</div>` + l.innerHTML; 
+}
+
+function end(t, m) { 
+    state.over = true; update_ui(); save_legacy();
+    
+    let stats_html = "<p><strong>Final Profit:</strong> $" + Math.round(state.profit).toLocaleString() + "</p>";
+    stats_html += "<p><strong>Total Extracted:</strong> $" + Math.round(state.ext).toLocaleString() + "</p>";
+    stats_html += "<p><strong>Efficiency:</strong> " + document.getElementById('s_eff').innerText + "%</p>";
+    
+    document.getElementById('go_title').innerText = t;
+    document.getElementById('go_body').innerHTML = `<div style="font-size:14px; margin-bottom: 10px;">${m}</div>` + stats_html;
+    document.getElementById('game_over_modal').style.display = 'flex';
+}
+
+function reset_game() { location.reload(); }
+
+init();
+</script>
+</body>
+</html>
